@@ -1,14 +1,16 @@
 - name: Deploy to Tomcat
   hosts: web
-  gather_facts: yes    # you can omit this too if you don't need facts
+  gather_facts: yes
   tasks:
+
     - name: Copy WAR file to Tomcat
-      copy:
+      ansible.builtin.copy:
         src: "/var/lib/jenkins/workspace/MavenAnsibleWebApp1CICD/target/MavenAnsibleWebApp.war"
         dest: "/opt/tomcat/webapps/MavenAnsibleWebApp.war"
-        remote_src: no
+        remote_src: yes
 
     - name: Restart Tomcat
-      systemd:
+      ansible.builtin.systemd:
         name: tomcat
         state: restarted
+
