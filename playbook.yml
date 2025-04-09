@@ -23,7 +23,7 @@
         remote_src: yes
         owner: tomcat
         group: tomcat
-        mode: '0777'
+        mode: '0644'
 
     - name: Restart Tomcat
       ansible.builtin.systemd:
