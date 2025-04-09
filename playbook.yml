@@ -1,16 +1,44 @@
 - name: Deploy to Tomcat
   hosts: web
+  become: yes
   gather_facts: yes
+
   tasks:
+    - name: Add jenkins user to tomcat group
+      ansible.builtin.user:
+        name: jenkins
+        groups: tomcat
+        append: yes
+      # uses ansible.builtin.user to append jenkins into the tomcat group :contentReference[oaicite:0]{index=0}
+
+    - name: Ensure webapps directory owned by tomcat:tomcat
+      ansible.builtin.file:
+        path: /opt/tomcat/webapps
+        state: directory
+        owner: tomcat
+        group: tomcat
+        recurse: yes
+      # recursively sets ownership to tomcat:tomcat :contentReference[oaicite:1]{index=1}
+
+    - name: Ensure group‑write permissions on webapps
+      ansible.builtin.file:
+        path: /opt/tomcat/webapps
+        mode: "g+rwX"
+        recurse: yes
+      # gives group write and retains execute on dirs :contentReference[oaicite:2]{index=2}
 
     - name: Copy WAR file to Tomcat
       ansible.builtin.copy:
         src: "/var/lib/jenkins/workspace/MavenAnsibleWebApp1CICD/target/MavenAnsibleWebApp1.war"
         dest: "/opt/tomcat/webapps/MavenAnsibleWebApp1.war"
         remote_src: yes
+        owner: tomcat
+        group: tomcat
+        mode: '0644'
 
     - name: Restart Tomcat
       ansible.builtin.systemd:
         name: tomcat
         state: restarted
+        daemon_reload: yes
 
