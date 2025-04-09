@@ -11,7 +11,7 @@
       ansible.builtin.file:
         path: /opt/tomcat/webapps
         state: directory
-        mode: '0755'
+        mode: '0777'
         owner: tomcat
         group: tomcat
         recurse: yes
@@ -23,7 +23,7 @@
         remote_src: yes
         owner: tomcat
         group: tomcat
-        mode: '0644'
+        mode: '0777'
 
     - name: Restart Tomcat
       ansible.builtin.systemd:
