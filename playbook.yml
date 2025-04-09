@@ -5,8 +5,8 @@
   tasks:
     - name: Copy WAR file to Tomcat
       ansible.builtin.copy:
-        src: "/var/lib/jenkins/workspace/MavenAnsibleWebApp1CICD/target/MavenAnsibleWebApp.war"
-        dest: "/opt/tomcat/webapps/MavenAnsibleWebApp.war"
+        src: "/var/lib/jenkins/workspace/MavenAnsibleWebApp1CICD/target/MavenAnsibleWebApp1.war"
+        dest: "/opt/tomcat/webapps/MavenAnsibleWebApp1.war"
         remote_src: yes
         owner: tomcat
         group: tomcat
