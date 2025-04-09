@@ -10,9 +10,15 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/icemberg/MavenAnsibleWebApp1.git'
+
             }
         }
-
+	stage('Install Ansible Collections') {
+            steps {
+                sh 'ansible-galaxy collection install ansible.posix'
+                sh 'ansible-galaxy collection install community.general'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'mvn clean package'  // Run Maven build
@@ -26,7 +32,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-               sh 'mvn clean package'  
+ 
                sh 'ansible-playbook playbook.yml -i hosts.ini --vault-password-file .vault_pass.txt -vvv'
             }
         }
