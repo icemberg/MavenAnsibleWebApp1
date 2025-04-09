@@ -1,7 +1,9 @@
 - name: Deploy to Tomcat
   hosts: web
   gather_facts: yes
-  become: yes  # Run tasks with sudo if needed
+  become: yes
+  become_method: sudo
+  become_user: root
 
   tasks:
     - name: Ensure /opt/tomcat/webapps is writable
