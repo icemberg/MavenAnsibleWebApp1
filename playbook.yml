@@ -4,6 +4,8 @@
   become: yes
   vars_files:
     - vault.yml
+  vars:
+    ansible_become_password: "root"
 
   tasks:
     - name: Ensure /opt/tomcat/webapps is writable
