@@ -1,20 +1,43 @@
 - name: Deploy to Tomcat
-  hosts: web
+  hosts: localhost  # Adjusted based on output showing localhost
   gather_facts: yes
+  become: yes
+  become_user: root
   vars_files:
     - vault.yml
-  vars:
-    ansible_become_password: "root"
 
   tasks:
+    - name: Remove immutable attribute from /opt/tomcat/webapps
+      ansible.builtin.command: chattr -i /opt/tomcat/webapps
+      become: yes
+      become_user: root
+      register: chattr_result
+      changed_when: chattr_result.rc == 0
+      failed_when: false
+
+    - name: Set SELinux context for Tomcat webapps
+      ansible.posix.sefcontext:
+        target: '/opt/tomcat/webapps(/.*)?'
+        setype: httpd_sys_content_t
+        state: present
+      become: yes
+      when: ansible_selinux.status == "enabled"
+
+    - name: Apply SELinux context
+      ansible.builtin.command: restorecon -R /opt/tomcat/webapps
+      become: yes
+      when: ansible_selinux.status == "enabled"
+
     - name: Ensure /opt/tomcat/webapps is writable
       ansible.builtin.file:
         path: /opt/tomcat/webapps
         state: directory
-        mode: '0777'
+        mode: '0777'  # Start with full permissions for testing
         owner: tomcat
         group: tomcat
         recurse: yes
+      become: yes
+      become_user: root
 
     - name: Copy WAR file to Tomcat
       ansible.builtin.copy:
@@ -24,6 +47,8 @@
         owner: tomcat
         group: tomcat
         mode: '0644'
+      become: yes
+      become_user: root
 
     - name: Restart Tomcat
       ansible.builtin.systemd:
