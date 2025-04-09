@@ -1,6 +1,6 @@
 - name: Deploy to Tomcat
   hosts: web
-  become: yes
+  gather_facts: yes    # you can omit this too if you don't need facts
   tasks:
     - name: Copy WAR file to Tomcat
       copy:
@@ -12,4 +12,3 @@
       systemd:
         name: tomcat
         state: restarted
-
