@@ -1,21 +1,16 @@
 - name: Deploy to Tomcat
   hosts: web
-  become: yes
   gather_facts: yes
-
   tasks:
+
     - name: Copy WAR file to Tomcat
       ansible.builtin.copy:
         src: "/var/lib/jenkins/workspace/MavenAnsibleWebApp1CICD/target/MavenAnsibleWebApp.war"
         dest: "/opt/tomcat/webapps/MavenAnsibleWebApp.war"
         remote_src: yes
-        owner: tomcat
-        group: tomcat
-        mode: '0644'
 
     - name: Restart Tomcat
       ansible.builtin.systemd:
         name: tomcat
         state: restarted
-        daemon_reload: yes
 
