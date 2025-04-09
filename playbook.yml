@@ -1,7 +1,6 @@
 - name: Deploy to Tomcat
   hosts: web
   gather_facts: yes
-  become: yes
   vars_files:
     - vault.yml
   vars:
