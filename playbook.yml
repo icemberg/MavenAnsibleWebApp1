@@ -1,8 +1,18 @@
 - name: Deploy to Tomcat
   hosts: web
-  gather_facts: yes    # no become, so facts are gathered as root without sudo
+  gather_facts: yes
+  become: yes  # Run tasks with sudo if needed
 
   tasks:
+    - name: Ensure /opt/tomcat/webapps is writable
+      ansible.builtin.file:
+        path: /opt/tomcat/webapps
+        state: directory
+        mode: '0755'
+        owner: tomcat
+        group: tomcat
+        recurse: yes
+
     - name: Copy WAR file to Tomcat
       ansible.builtin.copy:
         src: "/var/lib/jenkins/workspace/MavenAnsibleWebApp1CICD/target/MavenAnsibleWebApp1.war"
@@ -17,4 +27,3 @@
         name: tomcat
         state: restarted
         daemon_reload: yes
-
