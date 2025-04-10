@@ -1,26 +1,14 @@
 - name: Deploy to Tomcat
   hosts: web
-  gather_facts: yes
-
+  become: yes
   tasks:
-    - name: Ensure webapps directory is group‑writable
-      ansible.builtin.file:
-        path: /opt/tomcat/webapps
-        state: directory
-        mode: '0775'
-
-
     - name: Copy WAR file to Tomcat
-      ansible.builtin.copy:
-        src: "/var/lib/jenkins/workspace/MavenAnsibleWebApp1CICD/target/MavenAnsibleWebApp1.war"
-        dest: "/opt/tomcat/webapps/MavenAnsibleWebApp1.war"
-        remote_src: yes
-        mode: '0644'
-      # note: no owner/group here, so no chown attempt :contentReference[oaicite:0]{index=0}
+      copy:
+        src: "/var/snap/jenkins/4829/workspace/MavenAnsibleWebApp-CICD/target/MavenAnsibleWebApp.war"
+        dest: "/opt/tomcat/webapps/MavenAnsibleWebApp.war"
+        remote_src: no
 
     - name: Restart Tomcat
-      ansible.builtin.systemd:
+      systemd:
         name: tomcat
         state: restarted
-        daemon_reload: yes
-      become: yes
