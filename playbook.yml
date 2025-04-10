@@ -7,10 +7,8 @@
       ansible.builtin.file:
         path: /opt/tomcat/webapps
         state: directory
-        owner: tomcat
-        group: tomcat
         mode: '0775'
-        recurse: yes
+
 
     - name: Copy WAR file to Tomcat
       ansible.builtin.copy:
@@ -25,4 +23,4 @@
         name: tomcat
         state: restarted
         daemon_reload: yes
-
+      become: yes
