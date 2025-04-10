@@ -3,7 +3,7 @@
   gather_facts: yes
 
   tasks:
-    - name: Ensure webapps directory is owned and group‑writable
+    - name: Ensure webapps directory is group‑writable
       ansible.builtin.file:
         path: /opt/tomcat/webapps
         state: directory
@@ -17,9 +17,8 @@
         src: "/var/lib/jenkins/workspace/MavenAnsibleWebApp1CICD/target/MavenAnsibleWebApp1.war"
         dest: "/opt/tomcat/webapps/MavenAnsibleWebApp1.war"
         remote_src: yes
-        owner: tomcat
-        group: tomcat
         mode: '0644'
+      # note: no owner/group here, so no chown attempt :contentReference[oaicite:0]{index=0}
 
     - name: Restart Tomcat
       ansible.builtin.systemd:

@@ -27,7 +27,7 @@ pipeline {
         stage('Deploy') {
             steps {
  
-               sh 'ansible-playbook playbook.yml -i hosts.ini --vault-password-file .vault_pass.txt -vvv'
+               sh 'ansible-playbook playbook.yml -i hosts.ini'
             }
         }
 
