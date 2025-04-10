@@ -13,12 +13,6 @@ pipeline {
 
             }
         }
-	stage('Install Ansible Collections') {
-            steps {
-                sh 'ansible-galaxy collection install ansible.posix'
-                sh 'ansible-galaxy collection install community.general'
-            }
-        }
         stage('Build') {
             steps {
                 sh 'mvn clean package'  // Run Maven build

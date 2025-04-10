@@ -9,7 +9,7 @@
         state: directory
         owner: tomcat
         group: tomcat
-        mode: '0777'
+        mode: '0775'
         recurse: yes
 
     - name: Copy WAR file to Tomcat
